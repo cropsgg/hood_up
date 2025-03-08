@@ -1,3 +1,60 @@
+// Media Fallback URLs for Vercel deployment
+const MEDIA_FALLBACKS = {
+  'hoodie1.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
+  'hoodie2.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
+  'hoodie3.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
+  'hoodie4.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/shoes.png',
+  'hoodie5.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
+  'hoodie6.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
+  'hoodie7.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
+  'hoodie8.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/shoes.png',
+  'hoodie9.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
+  'hoodie10.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
+  'hoodie11.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
+  'coolx front page video.mp4': 'https://res.cloudinary.com/demo/video/upload/v1613748829/samples/sea-turtle.mp4'
+};
+
+// Function to check if we're in production environment (Vercel)
+function isProduction() {
+  return window.location.hostname !== 'localhost' && 
+         !window.location.hostname.includes('127.0.0.1');
+}
+
+// Function to get the correct URL for media files (original or fallback)
+function getMediaUrl(filename) {
+  // Check if we're in production and if we have a fallback for this file
+  if (isProduction() && MEDIA_FALLBACKS[filename]) {
+    return MEDIA_FALLBACKS[filename];
+  }
+  
+  // Otherwise return the original filename
+  return filename;
+}
+
+// Enhance image error handling
+document.addEventListener('DOMContentLoaded', function() {
+  // Fix video sources
+  const videos = document.querySelectorAll('video > source');
+  videos.forEach(source => {
+    const originalSrc = source.getAttribute('src');
+    if (originalSrc && isProduction() && MEDIA_FALLBACKS[originalSrc]) {
+      source.setAttribute('src', MEDIA_FALLBACKS[originalSrc]);
+      // Reload the video after changing source
+      const video = source.parentElement;
+      video.load();
+    }
+  });
+  
+  // Update product images in script
+  if (typeof products !== 'undefined' && isProduction()) {
+    products.forEach(product => {
+      if (product.image && MEDIA_FALLBACKS[product.image]) {
+        product.image = MEDIA_FALLBACKS[product.image];
+      }
+    });
+  }
+});
+
 // Product data
 const products = [
   { 
@@ -1330,28 +1387,32 @@ function initializeImageErrorHandling() {
     const images = document.querySelectorAll('img');
     images.forEach(img => {
       img.addEventListener('error', function() {
-        // Check what type of image has failed to load
-        if (this.src.includes('hoodie')) {
+        // Get the source filename
+        const srcPath = this.src;
+        const filename = srcPath.substring(srcPath.lastIndexOf('/') + 1);
+        
+        // Check if we have a fallback for this file
+        if (MEDIA_FALLBACKS[filename]) {
+          this.src = MEDIA_FALLBACKS[filename];
+        } else if (this.src.includes('hoodie')) {
           // For product images, use the existing hoodie images as fallbacks
-          const availableHoodies = [
-            'hoodie1.jpeg', 'hoodie2.jpeg', 'hoodie3.jpeg', 'hoodie4.jpeg', 
-            'hoodie5.jpeg', 'hoodie6.jpeg', 'hoodie7.jpeg', 'hoodie8.jpeg', 
-            'hoodie9.jpeg', 'hoodie10.jpeg', 'hoodie11.jpeg'
-          ];
-          // Select a random hoodie image from our available ones
-          const randomHoodie = availableHoodies[Math.floor(Math.random() * availableHoodies.length)];
-          this.src = randomHoodie;
+          const availableHoodies = Object.keys(MEDIA_FALLBACKS).filter(key => key.includes('hoodie'));
+          if (availableHoodies.length > 0) {
+            // Select a random hoodie image from our available ones
+            const randomHoodie = availableHoodies[Math.floor(Math.random() * availableHoodies.length)];
+            this.src = MEDIA_FALLBACKS[randomHoodie];
+          }
         } else if (this.classList.contains('thumbnail') || 
                   this.classList.contains('fit-type-img') || 
                   this.src.includes('measure')) {
           // For thumbnails, fit guide images, and measurement images
-          this.src = 'hoodie' + (Math.floor(Math.random() * 11) + 1) + '.jpeg';
+          this.src = MEDIA_FALLBACKS['hoodie' + (Math.floor(Math.random() * 11) + 1) + '.jpeg'];
         } else if (this.parentElement && this.parentElement.classList.contains('review-avatar')) {
           // If it's an avatar in reviews, just hide it
           this.style.display = 'none';
         } else {
           // For any other images, use a general fallback
-          this.src = 'hoodie1.jpeg';
+          this.src = MEDIA_FALLBACKS['hoodie1.jpeg'] || 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg';
         }
         
         // Add appropriate styling to ensure the fallback looks good
