@@ -84,19 +84,30 @@ async function ensureMediaFile(file) {
     let placeholderUrl;
     
     if (ext === '.mp4') {
-      placeholderUrl = 'https://res.cloudinary.com/demo/video/upload/v1613748829/samples/sea-turtle.mp4';
+      placeholderUrl = 'https://player.vimeo.com/external/530231761.sd.mp4?s=5a12dd5d1b47ddeff753215f0fb8e9af10e02e78&profile_id=164&oauth2_token_id=57447761';
     } else if (ext === '.png' || ext === '.jpeg' || ext === '.jpg') {
-      // Use the existing hoodie1.jpeg as placeholder if it exists
-      try {
-        await fs.access(path.join(__dirname, 'hoodie1.jpeg'));
-        return path.join(__dirname, 'hoodie1.jpeg');
-      } catch {
-        placeholderUrl = 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg';
+      // Use hoodie-related images from Unsplash as placeholders
+      const hoodieImages = [
+        'https://images.unsplash.com/photo-1565978771542-0fe16b79bcd4?q=80&w=800',
+        'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?q=80&w=800',
+        'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800',
+        'https://images.unsplash.com/photo-1556498361-9b6ef6d53852?q=80&w=800',
+        'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800'
+      ];
+      
+      // Select a random hoodie image
+      placeholderUrl = hoodieImages[Math.floor(Math.random() * hoodieImages.length)];
+      
+      // Try to match the file name pattern to provide more consistent placeholders
+      if (file.includes('hoodie')) {
+        const num = parseInt(file.replace(/[^0-9]/g, '')) || 1;
+        const index = (num % hoodieImages.length);
+        placeholderUrl = hoodieImages[index];
       }
     }
     
     if (placeholderUrl) {
-      console.log(`File ${file} not found. Using placeholder.`);
+      console.log(`File ${file} not found. Using hoodie placeholder.`);
       mediaMap[file] = placeholderUrl;
       return null;
     }
@@ -123,11 +134,22 @@ async function build() {
         console.log(`Uploaded ${file} to ${result.secure_url}`);
       } catch (error) {
         console.error(`Error uploading ${file}:`, error.message);
-        // If upload fails, use a placeholder URL
+        // If upload fails, use a placeholder URL with hoodie-related content
         if (file.includes('.mp4')) {
-          mediaMap[file] = 'https://res.cloudinary.com/demo/video/upload/v1613748829/samples/sea-turtle.mp4';
+          mediaMap[file] = 'https://player.vimeo.com/external/530231761.sd.mp4?s=5a12dd5d1b47ddeff753215f0fb8e9af10e02e78&profile_id=164&oauth2_token_id=57447761';
         } else {
-          mediaMap[file] = 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg';
+          // Assign hoodie images based on file name pattern
+          const hoodieImages = [
+            'https://images.unsplash.com/photo-1565978771542-0fe16b79bcd4?q=80&w=800',
+            'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?q=80&w=800',
+            'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800',
+            'https://images.unsplash.com/photo-1556498361-9b6ef6d53852?q=80&w=800',
+            'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800'
+          ];
+          
+          const num = parseInt(file.replace(/[^0-9]/g, '')) || 1;
+          const index = (num % hoodieImages.length);
+          mediaMap[file] = hoodieImages[index];
         }
       }
     }

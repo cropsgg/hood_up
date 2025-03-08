@@ -1,17 +1,17 @@
 // Media Fallback URLs for Vercel deployment
 const MEDIA_FALLBACKS = {
-  'hoodie1.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
-  'hoodie2.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
-  'hoodie3.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
-  'hoodie4.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/shoes.png',
-  'hoodie5.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
-  'hoodie6.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
-  'hoodie7.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
-  'hoodie8.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/shoes.png',
-  'hoodie9.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/leather-bag-gray.jpg',
-  'hoodie10.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/accessories-bag.jpg',
-  'hoodie11.jpeg': 'https://res.cloudinary.com/demo/image/upload/v1579702300/samples/ecommerce/analog-classic.jpg',
-  'coolx front page video.mp4': 'https://res.cloudinary.com/demo/video/upload/v1613748829/samples/sea-turtle.mp4'
+  'hoodie1.jpeg': 'https://images.unsplash.com/photo-1565978771542-0fe16b79bcd4?q=80&w=800',
+  'hoodie2.jpeg': 'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?q=80&w=800',
+  'hoodie3.jpeg': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800',
+  'hoodie4.jpeg': 'https://images.unsplash.com/photo-1556498361-9b6ef6d53852?q=80&w=800',
+  'hoodie5.jpeg': 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800',
+  'hoodie6.jpeg': 'https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?q=80&w=800',
+  'hoodie7.jpeg': 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=800',
+  'hoodie8.jpeg': 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=800',
+  'hoodie9.jpeg': 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800',
+  'hoodie10.jpeg': 'https://images.unsplash.com/photo-1542327903-8ceae9e70a0c?q=80&w=800',
+  'hoodie11.jpeg': 'https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=800',
+  'coolx front page video.mp4': 'https://player.vimeo.com/external/530231761.sd.mp4?s=5a12dd5d1b47ddeff753215f0fb8e9af10e02e78&profile_id=164&oauth2_token_id=57447761'
 };
 
 // Function to check if we're in production environment (Vercel)
