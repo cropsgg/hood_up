@@ -1,0 +1,30 @@
+{
+  "name": "hood_up",
+  "version": "1.0.0",
+  "description": "HoodUp Premium Hoodies Collection",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cropsgg/hood_up.git"
+  },
+  "keywords": [
+    "hoodie",
+    "fashion",
+    "ecommerce"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cropsgg/hood_up/issues"
+  },
+  "homepage": "https://github.com/cropsgg/hood_up#readme",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "cloudinary": "^1.41.3",
+    "dotenv": "^16.4.5"
+  }
+} 
