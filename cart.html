@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart | HoodUp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* Cart Page Specific Styles */
+    .cart-page-container {
+      max-width: var(--container-width);
+      margin: 40px auto;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    .cart-page-title {
+      margin-bottom: var(--spacing-xl);
+      font-size: 2rem;
+      text-align: center;
+    }
+    
+    .cart-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--spacing-xl);
+    }
+    
+    .cart-items {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      box-shadow: var(--card-shadow);
+    }
+    
+    .cart-item {
+      display: grid;
+      grid-template-columns: 100px 1fr auto auto auto;
+      gap: var(--spacing-md);
+      align-items: center;
+      padding: var(--spacing-md) 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    
+    .cart-item-image {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: var(--border-radius-md);
+    }
+    
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .cart-item-details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    
+    .cart-item-details h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+    
+    .item-meta {
+      font-size: 0.9rem;
+      color: var(--dark-gray);
+    }
+    
+    .item-price {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+    }
+    
+    .quantity-control button {
+      width: 32px;
+      height: 32px;
+      background: var(--white);
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .quantity-control button:hover {
+      background: var(--light-bg);
+    }
+    
+    .quantity-control span {
+      width: 32px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .item-total {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .remove-item {
+      background: none;
+      border: none;
+      color: var(--dark-gray);
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+    
+    .remove-item:hover {
+      color: var(--secondary);
+    }
+    
+    .cart-summary {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      box-shadow: var(--card-shadow);
+      position: sticky;
+      top: 120px;
+      height: max-content;
+    }
+    
+    .summary-title {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .summary-row.total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: var(--spacing-md);
+      padding-top: var(--spacing-md);
+      border-top: 1px solid var(--light-gray);
+    }
+    
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      padding: var(--spacing-md);
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: var(--border-radius-md);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: var(--spacing-lg);
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+    
+    .checkout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .continue-shopping {
+      display: block;
+      text-align: center;
+      margin-top: var(--spacing-md);
+      color: var(--primary);
+      text-decoration: underline;
+      transition: all var(--transition-fast);
+    }
+    
+    .continue-shopping:hover {
+      color: var(--accent);
+    }
+    
+    .promo-code {
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .promo-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+    }
+    
+    .promo-form {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .promo-form input {
+      flex: 1;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .promo-form button {
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--dark-gray);
+      color: var(--white);
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .promo-form button:hover {
+      background: var(--near-black);
+    }
+    
+    .delivery-options {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .delivery-option {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .delivery-option:hover, .delivery-option.selected {
+      border-color: var(--primary);
+      background-color: rgba(42, 57, 144, 0.05);
+    }
+    
+    .delivery-option input {
+      cursor: pointer;
+    }
+    
+    .delivery-option-label {
+      flex: 1;
+      cursor: pointer;
+    }
+    
+    .delivery-price {
+      font-weight: 600;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: var(--spacing-xxl) 0;
+    }
+    
+    .empty-cart i {
+      font-size: 4rem;
+      color: var(--light-gray);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .empty-cart h3 {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .empty-cart p {
+      margin-bottom: var(--spacing-lg);
+      color: var(--dark-gray);
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .cart-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .cart-summary {
+        position: static;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .cart-item {
+        grid-template-columns: 80px 1fr;
+        grid-template-rows: auto auto auto;
+        gap: var(--spacing-sm);
+      }
+      
+      .cart-item-image {
+        grid-row: span 3;
+        width: 80px;
+        height: 80px;
+      }
+      
+      .item-total {
+        grid-column: 2;
+        justify-self: start;
+      }
+      
+      .remove-item {
+        position: absolute;
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .cart-items {
+        padding: var(--spacing-md);
+      }
+      
+      .cart-summary {
+        padding: var(--spacing-md);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement-bar">
+    <p>Free shipping on all orders over ₹1999 | Use code HOODUPNEW for 10% off your first order</p>
+  </div>
+  
+  <header class="main-header">
+    <div class="container header-container">
+      <div class="nav-icon" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="logo">
+        <h1><a href="index.html">HoodUp</a></h1>
+      </div>
+      
+      <div class="header-actions">
+        <div class="search-icon" onclick="toggleSearch()">
+          <i class="fas fa-search"></i>
+        </div>
+        
+        <div class="cart-wrapper">
+          <a href="cart.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <div id="cart-counter">0</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <nav id="dropdownMenu" class="dropdown-menu">
+      <ul>
+        <li><a href="#hoodies.html">Hoodies</a></li>
+        <li><a href="#joggers.html">Joggers</a></li>
+        <li><a href="#t-shirts.html">T-Shirts</a></li>
+        <li><a href="my-orders.html">My Orders</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+      </ul>
+    </nav>
+    
+    <div id="searchOverlay" class="search-overlay">
+      <div class="search-container">
+        <input type="text" placeholder="Search for hoodies..." id="searchInput">
+        <button type="button" id="searchButton">Search</button>
+        <button type="button" class="close-search" onclick="toggleSearch()">×</button>
+      </div>
+      <div class="quick-links">
+        <p>Popular Searches:</p>
+        <div class="tag-cloud">
+          <a href="#">Black Hoodies</a>
+          <a href="#">Oversized</a>
+          <a href="#">Winter Collection</a>
+          <a href="#">Premium</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cart Page Content -->
+  <div class="cart-page-container">
+    <h1 class="cart-page-title">Your Shopping Cart</h1>
+    
+    <div class="cart-container">
+      <div class="cart-items" id="cartContainer">
+        <!-- Cart items will be loaded dynamically via JavaScript -->
+      </div>
+      
+      <div class="cart-summary">
+        <h2 class="summary-title">Order Summary</h2>
+        
+        <div class="delivery-options">
+          <h3 class="promo-title">Delivery Options</h3>
+          <div class="delivery-option selected">
+            <input type="radio" id="standard" name="delivery" value="standard" checked>
+            <label for="standard" class="delivery-option-label">Standard Delivery (3-5 days)</label>
+            <span class="delivery-price">Free</span>
+          </div>
+          <div class="delivery-option">
+            <input type="radio" id="express" name="delivery" value="express">
+            <label for="express" class="delivery-option-label">Express Delivery (1-2 days)</label>
+            <span class="delivery-price">₹99</span>
+          </div>
+        </div>
+        
+        <div class="promo-code">
+          <h3 class="promo-title">Promo Code</h3>
+          <div class="promo-form">
+            <input type="text" placeholder="Enter code" id="promoCodeInput">
+            <button type="button" id="applyPromoBtn">Apply</button>
+          </div>
+        </div>
+        
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotalPrice">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shippingPrice">Free</span>
+        </div>
+        <div class="summary-row" id="discountRow" style="display: none;">
+          <span>Discount</span>
+          <span id="discountPrice">-₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="totalPrice">₹0</span>
+        </div>
+        
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+        <a href="index.html" class="continue-shopping">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>HoodUp</h3>
+          <p>Premium quality hoodies for the modern lifestyle. Comfort meets style in every stitch.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">All Products</a></li>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Best Sellers</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Information</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 HoodUp. All rights reserved.</p>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fab fa-cc-apple-pay"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Display cart
+      displayEnhancedCart();
+      
+      // Initialize radio buttons
+      setupDeliveryOptions();
+      
+      // Initialize promo code
+      setupPromoCode();
+    });
+    
+    // Setup delivery options
+    function setupDeliveryOptions() {
+      const deliveryOptions = document.querySelectorAll('.delivery-option');
+      const shippingPrice = document.getElementById('shippingPrice');
+      
+      deliveryOptions.forEach(option => {
+        const radio = option.querySelector('input[type="radio"]');
+        
+        // Click event for the entire container
+        option.addEventListener('click', () => {
+          radio.checked = true;
+          
+          // Update selected styling
+          deliveryOptions.forEach(opt => {
+            opt.classList.remove('selected');
+          });
+          option.classList.add('selected');
+          
+          // Update shipping price
+          if (radio.value === 'express') {
+            shippingPrice.textContent = '₹99';
+          } else {
+            shippingPrice.textContent = 'Free';
+          }
+          
+          // Update total
+          updateOrderTotal();
+        });
+      });
+    }
+    
+    // Setup promo code
+    function setupPromoCode() {
+      const applyPromoBtn = document.getElementById('applyPromoBtn');
+      const promoCodeInput = document.getElementById('promoCodeInput');
+      const discountRow = document.getElementById('discountRow');
+      const discountPrice = document.getElementById('discountPrice');
+      
+      if (applyPromoBtn) {
+        applyPromoBtn.addEventListener('click', () => {
+          const promoCode = promoCodeInput.value.trim().toUpperCase();
+          
+          // Simple promo code check
+          if (promoCode === 'HOODUPNEW') {
+            // Calculate 10% discount
+            const subtotal = calculateSubtotal();
+            const discount = Math.round(subtotal * 0.1);
+            
+            // Update UI
+            discountRow.style.display = 'flex';
+            discountPrice.textContent = `-₹${discount}`;
+            
+            // Show success message
+            showToast('Promo code applied successfully!');
+            
+            // Update total
+            updateOrderTotal();
+          } else {
+            // Show error message
+            showToast('Invalid promo code. Try HOODUPNEW for 10% off.');
+          }
+        });
+      }
+    }
+    
+    // Display enhanced cart with more details
+    function displayEnhancedCart() {
+      const cartContainer = document.getElementById('cartContainer');
+      if (!cartContainer) return;
+      
+      // Check if cart is empty
+      if (cart.length === 0) {
+        cartContainer.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any products to your cart yet.</p>
+            <a href="index.html" class="cta-button primary">Start Shopping</a>
+          </div>
+        `;
+        
+        // Hide summary or show empty state
+        document.querySelector('.cart-summary').style.display = 'none';
+        return;
+      }
+      
+      // Show summary
+      document.querySelector('.cart-summary').style.display = 'block';
+      
+      // Clear the cart container
+      cartContainer.innerHTML = '';
+      
+      // Create cart items
+      cart.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+        
+        // Generate color and size display
+        const colorDisplay = item.color ? `<span class="item-meta">Color: ${item.color}</span>` : '';
+        const sizeDisplay = item.size ? `<span class="item-meta">Size: ${item.size}</span>` : '';
+        
+        cartItem.innerHTML = `
+          <div class="cart-item-image">
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+          <div class="cart-item-details">
+            <h3>${item.name}</h3>
+            ${colorDisplay}
+            ${sizeDisplay}
+            <span class="item-price">₹${item.price}</span>
+          </div>
+          <div class="quantity-control">
+            <button onclick="decreaseQuantity(${item.id})">-</button>
+            <span id="quantity-${item.id}">${item.quantity}</span>
+            <button onclick="increaseQuantity(${item.id})">+</button>
+          </div>
+          <div class="item-total">₹${item.price * item.quantity}</div>
+          <button class="remove-item" onclick="removeFromCart(${item.id})">
+            <i class="fas fa-trash"></i>
+          </button>
+        `;
+        
+        cartContainer.appendChild(cartItem);
+      });
+      
+      // Update order summary
+      updateOrderTotal();
+    }
+    
+    // Calculate cart subtotal
+    function calculateSubtotal() {
+      return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+    
+    // Update order total including shipping and discount
+    function updateOrderTotal() {
+      const subtotalPrice = document.getElementById('subtotalPrice');
+      const shippingPrice = document.getElementById('shippingPrice');
+      const discountRow = document.getElementById('discountRow');
+      const discountPrice = document.getElementById('discountPrice');
+      const totalPrice = document.getElementById('totalPrice');
+      
+      // Calculate subtotal
+      const subtotal = calculateSubtotal();
+      subtotalPrice.textContent = `₹${subtotal}`;
+      
+      // Get shipping cost
+      const shippingCost = shippingPrice.textContent === 'Free' ? 0 : 99;
+      
+      // Get discount amount
+      let discount = 0;
+      if (discountRow.style.display !== 'none') {
+        const discountText = discountPrice.textContent;
+        discount = parseInt(discountText.replace(/[^\d]/g, '')) || 0;
+      }
+      
+      // Calculate total
+      const total = subtotal + shippingCost - discount;
+      totalPrice.textContent = `₹${total}`;
+    }
+    
+    // Override the default increase quantity function
+    function increaseQuantity(productId) {
+      // Call the original function
+      window.increaseQuantity(productId);
+      
+      // Update our enhanced cart display
+      displayEnhancedCart();
+    }
+    
+    // Override the default decrease quantity function
+    function decreaseQuantity(productId) {
+      // Call the original function
+      window.decreaseQuantity(productId);
+      
+      // Update our enhanced cart display
+      displayEnhancedCart();
+    }
+    
+    // Override the default remove from cart function
+    function removeFromCart(productId) {
+      // Find product for toast message
+      const product = cart.find(item => item.id === productId);
+      const productName = product ? product.name : 'Product';
+      
+      // Call the original function
+      window.removeFromCart(productId);
+      
+      // Update our enhanced cart display
+      displayEnhancedCart();
+      
+      // Show toast message
+      showToast(`${productName} removed from cart`);
+    }
+  </script>
+</body>
+</html>

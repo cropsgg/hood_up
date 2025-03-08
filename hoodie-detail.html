@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | HoodUp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* Product Detail Specific Styles */
+    .product-detail-container {
+      max-width: var(--container-width);
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    .product-gallery {
+      position: relative;
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: var(--border-radius-lg);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .thumbnail-container {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all var(--transition-fast);
+    }
+    
+    .thumbnail:hover, .thumbnail.active {
+      opacity: 1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .wishlist-icon {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--dark-gray);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .wishlist-icon:hover {
+      background: var(--white);
+      color: var(--secondary);
+      transform: scale(1.1);
+    }
+    
+    .product-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-title {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .rating-stars {
+      color: #FFD700;
+    }
+    
+    .review-count {
+      color: var(--dark-gray);
+      font-size: 0.9rem;
+    }
+    
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .product-description {
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.6;
+    }
+    
+    .product-meta {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .product-meta p {
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .product-meta i {
+      color: var(--primary);
+      width: 20px;
+    }
+    
+    .color-options, .size-options {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .option-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .color-selector {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+    
+    .color-option:hover, .color-option.selected {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--primary);
+    }
+    
+    .size-selector {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+    }
+    
+    .size-option {
+      min-width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .size-option:hover, .size-option.selected {
+      background-color: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+    
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .quantity-label {
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+    }
+    
+    .quantity-control button {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .quantity-control button:hover {
+      background: var(--light-bg);
+    }
+    
+    .quantity-control span {
+      width: 40px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .add-to-cart-btn, .buy-now-btn {
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--border-radius-md);
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      transition: all var(--transition-fast);
+    }
+    
+    .add-to-cart-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .buy-now-btn {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .add-to-cart-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+    
+    .buy-now-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .product-features {
+      border-top: 1px solid var(--light-gray);
+      padding-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .features-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-md);
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .features-list {
+      padding-left: var(--spacing-lg);
+    }
+    
+    .features-list li {
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .shipping-info {
+      background-color: var(--light-bg);
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .shipping-info-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .shipping-info-title i {
+      color: var(--primary);
+    }
+    
+    .shipping-info p {
+      margin-bottom: var(--spacing-sm);
+      font-size: 0.9rem;
+    }
+    
+    .related-products {
+      margin: 60px auto;
+      max-width: var(--container-width);
+      padding: 0 var(--spacing-lg);
+    }
+    
+    .related-title {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .product-detail-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .main-image {
+        height: 400px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .product-actions {
+        flex-direction: column;
+      }
+      
+      .main-image {
+        height: 300px;
+      }
+      
+      .thumbnail {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement-bar">
+    <p>Free shipping on all orders over ₹1999 | Use code HOODUPNEW for 10% off your first order</p>
+  </div>
+  
+  <header class="main-header">
+    <div class="container header-container">
+      <div class="nav-icon" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="logo">
+        <h1><a href="index.html">HoodUp</a></h1>
+      </div>
+      
+      <div class="header-actions">
+        <div class="search-icon" onclick="toggleSearch()">
+          <i class="fas fa-search"></i>
+        </div>
+        
+        <div class="cart-wrapper">
+          <a href="cart.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <div id="cart-counter">0</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <nav id="dropdownMenu" class="dropdown-menu">
+      <ul>
+        <li><a href="#hoodies.html">Hoodies</a></li>
+        <li><a href="#joggers.html">Joggers</a></li>
+        <li><a href="#t-shirts.html">T-Shirts</a></li>
+        <li><a href="my-orders.html">My Orders</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+      </ul>
+    </nav>
+    
+    <div id="searchOverlay" class="search-overlay">
+      <div class="search-container">
+        <input type="text" placeholder="Search for hoodies..." id="searchInput">
+        <button type="button" id="searchButton">Search</button>
+        <button type="button" class="close-search" onclick="toggleSearch()">×</button>
+      </div>
+      <div class="quick-links">
+        <p>Popular Searches:</p>
+        <div class="tag-cloud">
+          <a href="#">Black Hoodies</a>
+          <a href="#">Oversized</a>
+          <a href="#">Winter Collection</a>
+          <a href="#">Premium</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Detail Section -->
+  <section class="product-detail-container">
+    <div class="product-gallery">
+      <img id="mainImage" src="" alt="" class="main-image">
+      <button id="wishlistBtn" class="wishlist-icon" onclick="toggleProductWishlist()">
+        <i class="far fa-heart"></i>
+      </button>
+      
+      <div id="thumbnailContainer" class="thumbnail-container">
+        <!-- Thumbnails will be added dynamically -->
+      </div>
+    </div>
+    
+    <div class="product-info">
+      <h1 id="productTitle" class="product-title">Product Name</h1>
+      
+      <div class="product-rating">
+        <div id="ratingStars" class="rating-stars"></div>
+        <span id="reviewCount" class="review-count">(0 reviews)</span>
+      </div>
+      
+      <div class="product-title">
+        <span id="productPrice" class="product-price">₹0</span>
+      </div>
+      
+      <div id="productDescription" class="product-description">
+        Product description loading...
+      </div>
+      
+      <div class="product-meta">
+        <p><i class="fas fa-box"></i> <span id="productMaterial">Material details loading...</span></p>
+        <p><i class="fas fa-check-circle"></i> <span id="productStock">In Stock</span></p>
+        <button class="ar-try-on-btn" onclick="openARView()">
+          <i class="fas fa-mobile-alt"></i> Try On AR View
+        </button>
+      </div>
+      
+      <div class="color-options">
+        <p class="option-title">Color:</p>
+        <div id="colorSelector" class="color-selector">
+          <!-- Color options will be added dynamically -->
+        </div>
+      </div>
+      
+      <div class="size-options">
+        <p class="option-title">Size:</p>
+        <div id="sizeSelector" class="size-selector">
+          <!-- Size options will be added dynamically -->
+        </div>
+      </div>
+      
+      <div class="quantity-selector">
+        <span class="quantity-label">Quantity:</span>
+        <div class="quantity-control">
+          <button onclick="decreaseProductQuantity()">-</button>
+          <span id="productQuantity">1</span>
+          <button onclick="increaseProductQuantity()">+</button>
+        </div>
+      </div>
+      
+      <div class="product-actions">
+        <button id="addToCartButton" class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+        </button>
+        <button id="buyNowButton" class="buy-now-btn">
+          <i class="fas fa-bolt"></i> Buy Now
+        </button>
+      </div>
+      
+      <div class="product-features">
+        <h3 class="features-title">Key Features</h3>
+        <ul id="featuresList" class="features-list">
+          <!-- Features will be added dynamically -->
+        </ul>
+      </div>
+      
+      <div class="social-share">
+        <span class="social-share-label">Share:</span>
+        <div class="social-share-buttons">
+          <a class="social-share-button facebook" onclick="shareProduct('facebook')">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a class="social-share-button twitter" onclick="shareProduct('twitter')">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a class="social-share-button pinterest" onclick="shareProduct('pinterest')">
+            <i class="fab fa-pinterest-p"></i>
+          </a>
+          <a class="social-share-button whatsapp" onclick="shareProduct('whatsapp')">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="shipping-info">
+        <h3 class="shipping-info-title"><i class="fas fa-truck"></i> Shipping Information</h3>
+        <p>Free shipping on orders above ₹1999</p>
+        <p>Delivery in 3-5 business days</p>
+        <p>Easy 30-day returns</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Related Products Section -->
+  <section class="related-products">
+    <h2 class="related-title">You Might Also Like</h2>
+    <div id="relatedProductsGrid" class="related-grid">
+      <!-- Related products will be added dynamically -->
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section">
+    <div class="container">
+      <h2 class="reviews-title">Customer Reviews</h2>
+      
+      <div class="reviews-summary">
+        <div class="rating-summary">
+          <div class="average-rating">
+            <span id="averageRating">4.8</span><span>/5</span>
+          </div>
+          <div id="totalRatingStars" class="rating-stars large"></div>
+          <div class="total-reviews">Based on <span id="reviewsCount">0</span> reviews</div>
+        </div>
+        
+        <div class="rating-bars">
+          <div class="rating-bar-item">
+            <span class="rating-label">5 <i class="fas fa-star"></i></span>
+            <div class="rating-bar">
+              <div class="rating-fill" style="width: 70%"></div>
+            </div>
+            <span class="rating-count">70%</span>
+          </div>
+          <div class="rating-bar-item">
+            <span class="rating-label">4 <i class="fas fa-star"></i></span>
+            <div class="rating-bar">
+              <div class="rating-fill" style="width: 20%"></div>
+            </div>
+            <span class="rating-count">20%</span>
+          </div>
+          <div class="rating-bar-item">
+            <span class="rating-label">3 <i class="fas fa-star"></i></span>
+            <div class="rating-bar">
+              <div class="rating-fill" style="width: 5%"></div>
+            </div>
+            <span class="rating-count">5%</span>
+          </div>
+          <div class="rating-bar-item">
+            <span class="rating-label">2 <i class="fas fa-star"></i></span>
+            <div class="rating-bar">
+              <div class="rating-fill" style="width: 3%"></div>
+            </div>
+            <span class="rating-count">3%</span>
+          </div>
+          <div class="rating-bar-item">
+            <span class="rating-label">1 <i class="fas fa-star"></i></span>
+            <div class="rating-bar">
+              <div class="rating-fill" style="width: 2%"></div>
+            </div>
+            <span class="rating-count">2%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="reviews-action">
+        <button class="write-review-btn" onclick="openReviewForm()">Write a Review</button>
+      </div>
+      
+      <div class="review-filters">
+        <select id="reviewSort" onchange="sortReviews()">
+          <option value="recent">Most Recent</option>
+          <option value="highest">Highest Rating</option>
+          <option value="lowest">Lowest Rating</option>
+        </select>
+      </div>
+      
+      <div id="reviewsList" class="reviews-list">
+        <!-- Reviews will be added dynamically -->
+      </div>
+      
+      <div id="loadMoreReviews" class="load-more-container" style="display: none;">
+        <button class="load-more-btn" onclick="loadMoreReviews()">Load More Reviews</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Review Form Modal -->
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Write a Review</h2>
+        <span class="close-modal" onclick="closeModal('reviewModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm">
+          <div class="form-group">
+            <label for="reviewName">Your Name</label>
+            <input type="text" id="reviewName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewEmail">Email Address</label>
+            <input type="email" id="reviewEmail" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Your Rating</label>
+            <div class="rating-input">
+              <i class="far fa-star" data-rating="1"></i>
+              <i class="far fa-star" data-rating="2"></i>
+              <i class="far fa-star" data-rating="3"></i>
+              <i class="far fa-star" data-rating="4"></i>
+              <i class="far fa-star" data-rating="5"></i>
+            </div>
+            <input type="hidden" id="reviewRating" value="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewTitle">Review Title</label>
+            <input type="text" id="reviewTitle" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewContent">Review</label>
+            <textarea id="reviewContent" rows="5" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewImage">Add Photos (optional)</label>
+            <input type="file" id="reviewImage" accept="image/*" multiple>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" onclick="closeModal('reviewModal')">Cancel</button>
+            <button type="submit" class="submit-btn">Submit Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>HoodUp</h3>
+          <p>Premium quality hoodies for the modern lifestyle. Comfort meets style in every stitch.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">All Products</a></li>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Best Sellers</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Information</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 HoodUp. All rights reserved.</p>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fab fa-cc-apple-pay"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Get product ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const productId = parseInt(params.get('id')) || 1;
+    
+    // Selected options
+    let selectedColor = '';
+    let selectedSize = '';
+    let productQuantity = 1;
+    
+    // Check if product is in wishlist
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    let isWishlisted = wishlist.some(item => item.id === productId);
+    
+    // Reviews functionality
+    let reviews = [];
+    let reviewsPage = 1;
+    const reviewsPerPage = 3;
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get product data
+      const product = products.find(p => p.id === productId);
+      
+      if (!product) {
+        showErrorMessage();
+        return;
+      }
+      
+      // Load product details
+      loadProductDetails(product);
+      
+      // Generate related products
+      loadRelatedProducts(product);
+      
+      // Initialize wishlist button
+      updateWishlistButton();
+      
+      // Add to cart button event
+      document.getElementById('addToCartButton').addEventListener('click', () => {
+        addToCartWithOptions(productId);
+      });
+      
+      // Buy now button event
+      document.getElementById('buyNowButton').addEventListener('click', () => {
+        addToCartWithOptions(productId);
+        window.location.href = 'cart.html';
+      });
+      
+      // Add to recently viewed
+      addToRecentlyViewed(productId);
+      
+      // Load dummy reviews
+      loadDummyReviews();
+      displayReviews();
+      
+      // Setup review form
+      setupReviewForm();
+
+      // Apply image error handling
+      applyProductImageFallbacks();
+    });
+    
+    // Load product details
+    function loadProductDetails(product) {
+      // Set product title
+      document.getElementById('productTitle').textContent = product.name;
+      
+      // Set main image
+      const mainImage = document.getElementById('mainImage');
+      mainImage.src = product.image;
+      mainImage.alt = product.name;
+      
+      // Generate thumbnails (simulated multiple images)
+      const thumbnailContainer = document.getElementById('thumbnailContainer');
+      
+      // Main image thumbnail
+      const mainThumbnail = document.createElement('img');
+      mainThumbnail.src = product.image;
+      mainThumbnail.alt = product.name;
+      mainThumbnail.classList.add('thumbnail', 'active');
+      mainThumbnail.addEventListener('click', () => {
+        updateMainImage(product.image);
+        updateActiveThumbnail(mainThumbnail);
+      });
+      thumbnailContainer.appendChild(mainThumbnail);
+      
+      // Simulated additional images (for demo purposes)
+      const additionalImages = [
+        product.image.replace('.jpeg', '_2.jpeg'),
+        product.image.replace('.jpeg', '_3.jpeg'),
+        product.image.replace('.jpeg', '_4.jpeg')
+      ];
+      
+      // For each simulated image, create a thumbnail that falls back to the main image
+      additionalImages.forEach((imageSrc, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = product.image; // Fallback to main image
+        thumbnail.alt = `${product.name} View ${index + 2}`;
+        thumbnail.classList.add('thumbnail');
+        thumbnail.addEventListener('click', () => {
+          updateMainImage(product.image); // Use main image as fallback
+          updateActiveThumbnail(thumbnail);
+        });
+        thumbnailContainer.appendChild(thumbnail);
+      });
+      
+      // Set rating and reviews
+      document.getElementById('ratingStars').innerHTML = getStarRating(product.rating);
+      document.getElementById('reviewCount').textContent = `(${product.reviews} reviews)`;
+      
+      // Set price
+      document.getElementById('productPrice').textContent = `₹${product.price}`;
+      
+      // Set description
+      document.getElementById('productDescription').textContent = product.description;
+      
+      // Set material
+      document.getElementById('productMaterial').textContent = product.material;
+      
+      // Set stock status
+      document.getElementById('productStock').textContent = product.inStock ? 'In Stock' : 'Out of Stock';
+      document.getElementById('productStock').style.color = product.inStock ? '#28a745' : '#dc3545';
+      
+      // Initialize color options
+      const colorSelector = document.getElementById('colorSelector');
+      
+      if (product.colors && product.colors.length > 0) {
+        product.colors.forEach(color => {
+          const colorOption = document.createElement('div');
+          colorOption.classList.add('color-option');
+          colorOption.dataset.color = color;
+          colorOption.style.backgroundColor = color;
+          
+          // Add border for white color
+          if (color === 'white') {
+            colorOption.style.border = '1px solid #ddd';
+          }
+          
+          colorOption.addEventListener('click', () => {
+            // Update selected color
+            selectedColor = color;
+            
+            // Update UI
+            document.querySelectorAll('.color-option').forEach(opt => {
+              opt.classList.remove('selected');
+            });
+            colorOption.classList.add('selected');
+          });
+          
+          colorSelector.appendChild(colorOption);
+        });
+        
+        // Auto-select first color
+        if (colorSelector.firstChild) {
+          colorSelector.firstChild.click();
+        }
+      }
+      
+      // Initialize size options
+      const sizeSelector = document.getElementById('sizeSelector');
+      
+      if (product.sizes && product.sizes.length > 0) {
+        product.sizes.forEach(size => {
+          const sizeOption = document.createElement('div');
+          sizeOption.classList.add('size-option');
+          sizeOption.dataset.size = size;
+          sizeOption.textContent = size;
+          
+          sizeOption.addEventListener('click', () => {
+            // Update selected size
+            selectedSize = size;
+            
+            // Update UI
+            document.querySelectorAll('.size-option').forEach(opt => {
+              opt.classList.remove('selected');
+            });
+            sizeOption.classList.add('selected');
+          });
+          
+          sizeSelector.appendChild(sizeOption);
+        });
+        
+        // Auto-select first size
+        if (sizeSelector.firstChild) {
+          sizeSelector.firstChild.click();
+        }
+      }
+      
+      // Set features
+      const featuresList = document.getElementById('featuresList');
+      
+      // Default features if not available in product data
+      const features = [
+        'Premium quality fabric for maximum comfort',
+        'Relaxed fit with ribbed cuffs and hem',
+        'Kangaroo pocket for practicality',
+        'Machine washable, tumble dry low',
+        'Designed for durability and style'
+      ];
+      
+      features.forEach(feature => {
+        const li = document.createElement('li');
+        li.textContent = feature;
+        featuresList.appendChild(li);
+      });
+    }
+    
+    // Update main image
+    function updateMainImage(src) {
+      const mainImage = document.getElementById('mainImage');
+      mainImage.src = src;
+    }
+    
+    // Update active thumbnail
+    function updateActiveThumbnail(selected) {
+      document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+        thumbnail.classList.remove('active');
+      });
+      selected.classList.add('active');
+    }
+    
+    // Load related products
+    function loadRelatedProducts(currentProduct) {
+      const relatedGrid = document.getElementById('relatedProductsGrid');
+      
+      // Get products with same color or style (except current product)
+      const related = products
+        .filter(p => p.id !== currentProduct.id && (
+          p.colors.some(c => currentProduct.colors.includes(c)) || 
+          p.price === currentProduct.price
+        ))
+        .slice(0, 4);
+      
+      // If not enough related products, add some others
+      if (related.length < 4) {
+        const moreProducts = products
+          .filter(p => p.id !== currentProduct.id && !related.some(r => r.id === p.id))
+          .slice(0, 4 - related.length);
+        
+        related.push(...moreProducts);
+      }
+      
+      // Create product cards
+      related.forEach(product => {
+        const isWishlisted = wishlist.some(item => item.id === product.id);
+        
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+        
+        productCard.innerHTML = `
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.name}">
+            <button class="wishlist-btn" data-id="${product.id}" onclick="toggleWishlist(${product.id})">
+              <i class="fas ${isWishlisted ? 'fa-heart' : 'fa-heart-o'}"></i>
+            </button>
+          </div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <div class="rating">
+              ${getStarRating(product.rating)} <span>(${product.reviews})</span>
+            </div>
+            <p class="product-price">₹${product.price}</p>
+            <div class="button-container">
+              <button class="detail-link" onclick="viewDetails(${product.id})">View Details</button>
+              <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+            </div>
+          </div>
+        `;
+        
+        relatedGrid.appendChild(productCard);
+      });
+    }
+    
+    // Update wishlist button
+    function updateWishlistButton() {
+      const wishlistBtn = document.getElementById('wishlistBtn');
+      const icon = wishlistBtn.querySelector('i');
+      
+      if (isWishlisted) {
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        icon.style.color = 'var(--secondary)';
+      } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+        icon.style.color = 'var(--dark-gray)';
+      }
+    }
+    
+    // Toggle product in wishlist
+    function toggleProductWishlist() {
+      if (isWishlisted) {
+        wishlist = wishlist.filter(item => item.id !== productId);
+      } else {
+        wishlist.push({ id: productId, dateAdded: new Date() });
+        
+        // Show toast notification
+        const product = products.find(p => p.id === productId);
+        if (product) {
+          showToast(`${product.name} added to wishlist!`);
+        }
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      
+      // Update state
+      isWishlisted = !isWishlisted;
+      
+      // Update UI
+      updateWishlistButton();
+    }
+    
+    // Increase product quantity
+    function increaseProductQuantity() {
+      productQuantity++;
+      document.getElementById('productQuantity').textContent = productQuantity;
+    }
+    
+    // Decrease product quantity
+    function decreaseProductQuantity() {
+      if (productQuantity > 1) {
+        productQuantity--;
+        document.getElementById('productQuantity').textContent = productQuantity;
+      }
+    }
+    
+    // Add to cart with selected options
+    function addToCartWithOptions(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      // Check if color and size are selected
+      if (!selectedColor || !selectedSize) {
+        showToast('Please select color and size');
+        return;
+      }
+      
+      // Generate unique item ID based on product ID, color, and size
+      const itemId = `${productId}-${selectedColor}-${selectedSize}`;
+      
+      // Check if item with same options exists in cart
+      const existingItemIndex = cart.findIndex(item => 
+        item.id === productId && 
+        item.color === selectedColor && 
+        item.size === selectedSize
+      );
+      
+      if (existingItemIndex !== -1) {
+        // Update quantity if item exists
+        cart[existingItemIndex].quantity += productQuantity;
+      } else {
+        // Add new item if it doesn't exist
+        cart.push({ 
+          id: productId, 
+          color: selectedColor,
+          size: selectedSize,
+          quantity: productQuantity, 
+          name: product.name,
+          price: product.price,
+          image: product.image
+        });
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Update UI
+      updateCartCounter();
+      
+      // Show toast notification
+      showToast(`${product.name} added to cart!`);
+    }
+    
+    // Show error message if product not found
+    function showErrorMessage() {
+      const container = document.querySelector('.product-detail-container');
+      container.innerHTML = `
+        <div class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          <h2>Product Not Found</h2>
+          <p>We couldn't find the product you're looking for.</p>
+          <a href="index.html" class="cta-button primary">Back to Shop</a>
+        </div>
+      `;
+    }
+    
+    // AR View Function
+    function openARView() {
+      // Check if device supports AR
+      if (navigator.xr && navigator.xr.isSessionSupported) {
+        navigator.xr.isSessionSupported('immersive-ar').then(supported => {
+          if (supported) {
+            startARSession();
+          } else {
+            showToast('Your device does not support AR view.');
+          }
+        });
+      } else {
+        // Fallback for devices without WebXR support
+        // Open a simulated AR experience or show a modal with 3D view
+        showARModal();
+      }
+    }
+    
+    // Simulated AR Modal
+    function showARModal() {
+      // Create a simulated AR experience modal
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.id = 'arModal';
+      
+      const product = products.find(p => p.id === productId);
+      const imageSrc = product ? product.image : 'hoodie' + (productId % 11 + 1) + '.jpeg';
+      
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>AR View - ${product ? product.name : 'Product'}</h2>
+            <span class="close-modal" onclick="closeModal('arModal')">&times;</span>
+          </div>
+          <div class="modal-body">
+            <div class="ar-simulation">
+              <img src="${imageSrc}" alt="${product ? product.name : 'Product'}" class="ar-image">
+              <div class="ar-controls">
+                <button onclick="rotateARImage('left')">
+                  <i class="fas fa-arrow-left"></i>
+                </button>
+                <button onclick="rotateARImage('right')">
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+                <button onclick="zoomARImage('in')">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button onclick="zoomARImage('out')">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+              </div>
+              <p class="ar-instructions">Use controls to rotate and zoom the product. This is a simulated AR experience.</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      setTimeout(() => {
+        document.getElementById('arModal').style.display = 'block';
+      }, 100);
+    }
+    
+    // Rotate AR Image
+    let rotation = 0;
+    function rotateARImage(direction) {
+      const arImage = document.querySelector('.ar-image');
+      if (!arImage) return;
+      
+      rotation += (direction === 'left') ? -30 : 30;
+      arImage.style.transform = `rotateY(${rotation}deg)`;
+    }
+    
+    // Zoom AR Image
+    let zoom = 1;
+    function zoomARImage(direction) {
+      const arImage = document.querySelector('.ar-image');
+      if (!arImage) return;
+      
+      zoom += (direction === 'in') ? 0.1 : -0.1;
+      zoom = Math.max(0.5, Math.min(zoom, 2)); // Limit zoom between 0.5x and 2x
+      arImage.style.transform = `rotateY(${rotation}deg) scale(${zoom})`;
+    }
+    
+    // Social Sharing
+    function shareProduct(platform) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      const url = window.location.href;
+      const text = `Check out this ${product.name} at HoodUp!`;
+      const image = window.location.origin + '/' + product.image;
+      
+      let shareUrl;
+      
+      switch (platform) {
+        case 'facebook':
+          shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+          break;
+        case 'twitter':
+          shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+          break;
+        case 'pinterest':
+          shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(image)}&description=${encodeURIComponent(text)}`;
+          break;
+        case 'whatsapp':
+          shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+          break;
+      }
+      
+      if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      }
+    }
+    
+    // Close any modal
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+        
+        // Remove modal from DOM if it's dynamically created
+        if (modalId === 'arModal') {
+          setTimeout(() => {
+            modal.remove();
+          }, 300);
+        }
+      }
+    }
+    
+    // Load dummy reviews
+    function loadDummyReviews() {
+      reviews = [
+        {
+          id: 1,
+          productId: productId,
+          name: "John D.",
+          rating: 5,
+          title: "Best hoodie I've ever owned",
+          content: "Extremely comfortable and fits perfectly. The material is high quality and hasn't faded after multiple washes. Definitely worth the price!",
+          date: new Date(2023, 3, 15),
+          verified: true,
+          likes: 12,
+          image: getRandomHoodieImage()
+        },
+        {
+          id: 2,
+          productId: productId,
+          name: "Sarah M.",
+          rating: 4,
+          title: "Great quality but sizing runs small",
+          content: "The quality of this hoodie is amazing. Very soft and warm. My only issue is that it runs a bit small, so I'd recommend sizing up if you prefer a looser fit. Otherwise, great purchase!",
+          date: new Date(2023, 2, 22),
+          verified: true,
+          likes: 8,
+          image: getRandomHoodieImage()
+        },
+        {
+          id: 3,
+          productId: productId,
+          name: "Mike P.",
+          rating: 5,
+          title: "Perfect for everyday wear",
+          content: "I wear this hoodie almost every day. It's so versatile and goes with everything. The quality is excellent and the color hasn't faded at all.",
+          date: new Date(2023, 1, 10),
+          verified: false,
+          likes: 5
+        },
+        {
+          id: 4,
+          productId: productId,
+          name: "Emma L.",
+          rating: 4,
+          title: "Stylish and comfortable",
+          content: "This hoodie is both stylish and comfortable. The material is soft and the design is modern. I've received many compliments wearing it. The only small issue is that the drawstrings are a bit long.",
+          date: new Date(2022, 11, 5),
+          verified: true,
+          likes: 3,
+          image: getRandomHoodieImage()
+        },
+        {
+          id: 5,
+          productId: productId,
+          name: "David R.",
+          rating: 3,
+          title: "Good but not great",
+          content: "The hoodie is decent quality, but not as thick as I expected. It's comfortable, but I'm not sure it's worth the price tag. Three stars for decent quality and style.",
+          date: new Date(2022, 10, 18),
+          verified: false,
+          likes: 1
+        }
+      ];
+      
+      // Update review counts
+      document.getElementById('reviewsCount').textContent = reviews.length;
+      document.getElementById('averageRating').textContent = calculateAverageRating().toFixed(1);
+      document.getElementById('totalRatingStars').innerHTML = getStarRating(calculateAverageRating());
+    }
+    
+    // Get a random hoodie image for reviews
+    function getRandomHoodieImage() {
+      const hoodieNum = Math.floor(Math.random() * 11) + 1;
+      return `hoodie${hoodieNum}.jpeg`;
+    }
+    
+    // Calculate average rating
+    function calculateAverageRating() {
+      if (reviews.length === 0) return 0;
+      
+      const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+      return total / reviews.length;
+    }
+    
+    // Display reviews
+    function displayReviews() {
+      const reviewsList = document.getElementById('reviewsList');
+      if (!reviewsList) return;
+      
+      // Clear existing reviews
+      reviewsList.innerHTML = '';
+      
+      // Sort reviews
+      const sortBy = document.getElementById('reviewSort')?.value || 'recent';
+      sortReviewsBy(sortBy);
+      
+      // Paginate reviews
+      const startIndex = 0;
+      const endIndex = Math.min(reviewsPage * reviewsPerPage, reviews.length);
+      const displayedReviews = reviews.slice(startIndex, endIndex);
+      
+      // Display reviews
+      displayedReviews.forEach(review => {
+        const reviewEl = document.createElement('div');
+        reviewEl.classList.add('review-item');
+        
+        // Add review image HTML if exists
+        const reviewImageHtml = review.image ? 
+          `<div class="review-image">
+            <img src="${review.image}" alt="Review Image" class="review-img">
+          </div>` : '';
+        
+        reviewEl.innerHTML = `
+          <div class="review-header">
+            <div class="review-author">
+              <div class="review-avatar">${review.name.charAt(0).toUpperCase()}</div>
+              <div class="review-author-details">
+                <div class="review-author-name">${review.name} ${review.verified ? '<span class="verified-badge">Verified Purchase</span>' : ''}</div>
+                <div class="review-date">${formatDate(review.date)}</div>
+              </div>
+            </div>
+            <div class="review-rating">
+              ${getStarRating(review.rating)}
+            </div>
+          </div>
+          <div class="review-title">${review.title}</div>
+          <div class="review-content">${review.content}</div>
+          ${reviewImageHtml}
+          <div class="review-actions">
+            <button class="review-like-btn" onclick="likeReview(${review.id})">
+              <i class="far fa-thumbs-up"></i> Helpful (${review.likes})
+            </button>
+            <button class="review-report-btn" onclick="reportReview(${review.id})">
+              Report
+            </button>
+          </div>
+        `;
+        
+        reviewsList.appendChild(reviewEl);
+      });
+      
+      // Show/hide load more button
+      const loadMoreBtn = document.getElementById('loadMoreReviews');
+      if (loadMoreBtn) {
+        loadMoreBtn.style.display = endIndex < reviews.length ? 'block' : 'none';
+      }
+    }
+    
+    // Format date
+    function formatDate(date) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString(undefined, options);
+    }
+    
+    // Sort reviews
+    function sortReviews() {
+      const sortBy = document.getElementById('reviewSort').value;
+      reviewsPage = 1; // Reset page when sorting changes
+      displayReviews();
+    }
+    
+    // Sort reviews by criteria
+    function sortReviewsBy(criteria) {
+      switch (criteria) {
+        case 'recent':
+          reviews.sort((a, b) => b.date - a.date);
+          break;
+        case 'highest':
+          reviews.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'lowest':
+          reviews.sort((a, b) => a.rating - b.rating);
+          break;
+      }
+    }
+    
+    // Load more reviews
+    function loadMoreReviews() {
+      reviewsPage++;
+      displayReviews();
+    }
+    
+    // Like a review
+    function likeReview(reviewId) {
+      const review = reviews.find(r => r.id === reviewId);
+      if (review) {
+        review.likes++;
+        displayReviews();
+        showToast('Thanks for your feedback!');
+      }
+    }
+    
+    // Report a review
+    function reportReview(reviewId) {
+      showToast('Review has been reported for moderation.');
+    }
+    
+    // Open review form
+    function openReviewForm() {
+      openModal('reviewModal');
+    }
+    
+    // Setup review form
+    function setupReviewForm() {
+      const form = document.getElementById('reviewForm');
+      if (!form) return;
+      
+      // Setup star rating selection
+      const stars = document.querySelectorAll('.rating-input i');
+      stars.forEach(star => {
+        star.addEventListener('mouseover', function() {
+          const rating = parseInt(this.dataset.rating);
+          highlightStars(stars, rating);
+        });
+        
+        star.addEventListener('mouseout', function() {
+          const currentRating = parseInt(document.getElementById('reviewRating').value);
+          highlightStars(stars, currentRating);
+        });
+        
+        star.addEventListener('click', function() {
+          const rating = parseInt(this.dataset.rating);
+          document.getElementById('reviewRating').value = rating;
+          highlightStars(stars, rating);
+        });
+      });
+      
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nameInput = document.getElementById('reviewName');
+        const emailInput = document.getElementById('reviewEmail');
+        const ratingInput = document.getElementById('reviewRating');
+        const titleInput = document.getElementById('reviewTitle');
+        const contentInput = document.getElementById('reviewContent');
+        
+        if (!nameInput || !emailInput || !ratingInput || !titleInput || !contentInput) return;
+        
+        const rating = parseInt(ratingInput.value);
+        if (rating === 0) {
+          showToast('Please select a rating');
+          return;
+        }
+        
+        // Create new review
+        const newReview = {
+          id: reviews.length + 1,
+          productId: productId,
+          name: nameInput.value,
+          rating: rating,
+          title: titleInput.value,
+          content: contentInput.value,
+          date: new Date(),
+          verified: false,
+          likes: 0
+        };
+        
+        // Add to reviews
+        reviews.unshift(newReview);
+        
+        // Reset form
+        form.reset();
+        highlightStars(stars, 0);
+        
+        // Update UI
+        document.getElementById('reviewsCount').textContent = reviews.length;
+        document.getElementById('averageRating').textContent = calculateAverageRating().toFixed(1);
+        document.getElementById('totalRatingStars').innerHTML = getStarRating(calculateAverageRating());
+        
+        // Display reviews and close modal
+        reviewsPage = 1;
+        displayReviews();
+        closeModal('reviewModal');
+        
+        // Show success message
+        showToast('Your review has been submitted. Thank you!');
+      });
+    }
+    
+    // Highlight stars for rating
+    function highlightStars(stars, rating) {
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.remove('far');
+          star.classList.add('fas');
+        } else {
+          star.classList.remove('fas');
+          star.classList.add('far');
+        }
+      });
+    }
+
+    // Apply fallback images for the product detail page
+    function applyProductImageFallbacks() {
+      const mainImage = document.getElementById('mainImage');
+      if (mainImage && !mainImage.src) {
+        mainImage.src = 'hoodie' + (productId % 11 + 1) + '.jpeg';
+      }
+
+      // Make sure thumbnails have images
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      thumbnails.forEach((thumbnail, index) => {
+        if (!thumbnail.src || thumbnail.src === 'about:blank') {
+          thumbnail.src = 'hoodie' + ((productId + index) % 11 + 1) + '.jpeg';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

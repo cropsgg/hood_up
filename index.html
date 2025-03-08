@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoodUp | Premium Hoodies Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="announcement-bar">
+    <p>Free shipping on all orders over ₹1999 | Use code HOODUPNEW for 10% off your first order</p>
+  </div>
+  
+  <header class="main-header">
+    <div class="container header-container">
+      <div class="nav-icon" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="logo">
+        <h1><a href="index.html">HoodUp</a></h1>
+      </div>
+      
+      <div class="header-actions">
+        <div class="search-icon" onclick="toggleSearch()">
+          <i class="fas fa-search"></i>
+        </div>
+        
+        <div class="cart-wrapper">
+          <a href="cart.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <div id="cart-counter">0</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <nav id="dropdownMenu" class="dropdown-menu">
+      <ul>
+        <li><a href="#hoodies.html">Hoodies</a></li>
+        <li><a href="#joggers.html">Joggers</a></li>
+        <li><a href="#t-shirts.html">T-Shirts</a></li>
+        <li><a href="my-orders.html">My Orders</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+      </ul>
+    </nav>
+    
+    <div id="searchOverlay" class="search-overlay">
+      <div class="search-container">
+        <input type="text" placeholder="Search for hoodies..." id="searchInput">
+        <button type="button" id="searchButton">Search</button>
+        <button type="button" class="close-search" onclick="toggleSearch()">×</button>
+      </div>
+      <div class="quick-links">
+        <p>Popular Searches:</p>
+        <div class="tag-cloud">
+          <a href="#">Black Hoodies</a>
+          <a href="#">Oversized</a>
+          <a href="#">Winter Collection</a>
+          <a href="#">Premium</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="fade-in">Elevate Your Style</h1>
+      <p class="fade-in delay-1">Premium quality hoodies for the modern lifestyle</p>
+      <div class="cta-container fade-in delay-2">
+        <a href="#product-section" class="cta-button primary">Shop Collection</a>
+        <a href="#about-section" class="cta-button secondary">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-video">
+      <video autoplay muted loop playsinline>
+        <source src="coolx front page video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="overlay"></div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+          <h3>Fast Shipping</h3>
+          <p>Free delivery on orders above ₹1999</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <h3>Premium Quality</h3>
+          <p>100% cotton with high GSM fabric</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h3>Easy Returns</h3>
+          <p>30-day hassle-free return policy</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Secure Checkout</h3>
+          <p>Protected payment processing</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collection Section -->
+  <section id="product-section" class="collection-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Hoodie Collection</h2>
+        <div class="filter-sort">
+          <div class="sort-dropdown">
+            <select id="sortOptions" onchange="sortProducts()">
+              <option value="default">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+            </select>
+          </div>
+          <button class="filter-button" onclick="toggleFilters()">
+            <i class="fas fa-filter"></i> Filter
+          </button>
+          <button class="size-guide-button" onclick="openModal('sizeGuideModal')">
+            <i class="fas fa-ruler"></i> Size Guide
+          </button>
+        </div>
+      </div>
+      
+      <div class="product-filter-container">
+        <div id="filterPanel" class="filter-panel">
+          <div class="filter-group">
+            <h3>Price Range</h3>
+            <div class="price-slider">
+              <input type="range" min="500" max="1000" value="1000" class="slider" id="priceRange">
+              <div class="price-range-display">
+                <span>₹500</span>
+                <span id="priceValue">₹1000</span>
+              </div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <h3>Colors</h3>
+            <div class="color-options">
+              <div class="color-option" data-color="black" style="background-color: black;"></div>
+              <div class="color-option" data-color="grey" style="background-color: grey;"></div>
+              <div class="color-option" data-color="red" style="background-color: red;"></div>
+              <div class="color-option" data-color="blue" style="background-color: blue;"></div>
+              <div class="color-option" data-color="green" style="background-color: green;"></div>
+              <div class="color-option" data-color="white" style="background-color: white; border: 1px solid #ddd;"></div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+            <button class="reset-filters-btn" onclick="resetFilters()">Reset</button>
+          </div>
+        </div>
+        
+        <div id="productGrid" class="product-grid">
+          <!-- Products will be loaded dynamically via JavaScript -->
+        </div>
+      </div>
+      
+      <div class="load-more-container">
+        <button id="loadMoreBtn" class="load-more-btn">Load More Products</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Featured Products</h2>
+      <div class="featured-carousel">
+        <!-- Featured products will be added dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Recently Viewed -->
+  <section class="recently-viewed-section" id="recentlyViewed">
+    <div class="container">
+      <h2 class="section-title">Recently Viewed</h2>
+      <div class="recently-viewed-grid">
+        <!-- Recently viewed products will be added dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about-section" class="about-section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>About HoodUp</h2>
+          <p>At HoodUp, we believe that comfort should never compromise style. Our journey began with a simple mission: to create the perfect hoodie that combines premium materials, thoughtful design, and contemporary aesthetics.</p>
+          <p>Each hoodie is crafted from 100% premium cotton with high GSM, ensuring durability and comfort that lasts through the seasons. We obsess over every detail - from the perfect fit to the finest stitching.</p>
+          <a href="#" class="about-cta">Learn More</a>
+        </div>
+        <div class="about-image">
+          <img src="hoodie11.jpeg" alt="HoodUp Workshop">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-container">
+        <div class="newsletter-content">
+          <h2>Join the HoodUp Community</h2>
+          <p>Subscribe to get 10% off your first order and stay updated with our latest collections and exclusive offers.</p>
+        </div>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email address" id="newsletter-email">
+          <button type="button" id="newsletter-submit">Subscribe</button>
+        </div>
+        <div id="newsletter-message"></div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Size Guide Modal -->
+  <div id="sizeGuideModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Size Guide</h2>
+        <span class="close-modal" onclick="closeModal('sizeGuideModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="size-guide-tabs">
+          <button class="tab-button active" onclick="switchTab(this, 'measurements')">Measurements</button>
+          <button class="tab-button" onclick="switchTab(this, 'fit-guide')">Fit Guide</button>
+          <button class="tab-button" onclick="switchTab(this, 'how-to-measure')">How to Measure</button>
+        </div>
+        
+        <div id="measurements" class="tab-content active">
+          <table class="size-chart">
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Chest (in)</th>
+                <th>Length (in)</th>
+                <th>Sleeve (in)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S</td>
+                <td>36-38</td>
+                <td>27</td>
+                <td>24</td>
+              </tr>
+              <tr>
+                <td>M</td>
+                <td>39-41</td>
+                <td>28</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>L</td>
+                <td>42-44</td>
+                <td>29</td>
+                <td>26</td>
+              </tr>
+              <tr>
+                <td>XL</td>
+                <td>45-47</td>
+                <td>30</td>
+                <td>27</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="fit-guide" class="tab-content">
+          <div class="fit-types">
+            <div class="fit-type">
+              <h3>Regular Fit</h3>
+              <img src="hoodie1.jpeg" alt="Regular Fit" class="fit-type-img">
+              <p>A comfortable, standard fit that's neither too loose nor too tight.</p>
+            </div>
+            <div class="fit-type">
+              <h3>Relaxed Fit</h3>
+              <img src="hoodie2.jpeg" alt="Relaxed Fit" class="fit-type-img">
+              <p>A looser, more casual fit offering extra room and comfort.</p>
+            </div>
+            <div class="fit-type">
+              <h3>Slim Fit</h3>
+              <img src="hoodie3.jpeg" alt="Slim Fit" class="fit-type-img">
+              <p>A more tailored fit that sits closer to the body.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="how-to-measure" class="tab-content">
+          <div class="measurement-guide">
+            <div class="measurement-item">
+              <h3>Chest</h3>
+              <img src="hoodie5.jpeg" alt="How to measure chest" class="measurement-img">
+              <p>Measure around the fullest part of your chest, keeping the tape measure horizontal.</p>
+            </div>
+            <div class="measurement-item">
+              <h3>Length</h3>
+              <img src="hoodie7.jpeg" alt="How to measure length" class="measurement-img">
+              <p>Measure from the highest point of the shoulder to the bottom hem.</p>
+            </div>
+            <div class="measurement-item">
+              <h3>Sleeve</h3>
+              <img src="hoodie9.jpeg" alt="How to measure sleeve" class="measurement-img">
+              <p>Measure from the shoulder seam to the end of the sleeve.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <p>Still not sure about your size? <a href="contact.html">Contact us</a> for assistance.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick View Modal -->
+  <div id="quickViewModal" class="modal">
+    <div class="modal-content quick-view-content">
+      <div class="modal-header">
+        <h2 id="quickViewTitle">Product Name</h2>
+        <span class="close-modal" onclick="closeModal('quickViewModal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="quick-view-grid">
+          <div class="quick-view-image">
+            <img id="quickViewImage" src="" alt="Product Image">
+          </div>
+          <div class="quick-view-details">
+            <div id="quickViewRating" class="rating"></div>
+            <div id="quickViewPrice" class="price"></div>
+            <p id="quickViewDescription" class="description"></p>
+            
+            <div class="quick-view-colors">
+              <p>Colors:</p>
+              <div id="quickViewColors" class="color-selector"></div>
+            </div>
+            
+            <div class="quick-view-sizes">
+              <p>Sizes:</p>
+              <div id="quickViewSizes" class="size-selector"></div>
+            </div>
+            
+            <div class="quick-view-quantity">
+              <p>Quantity:</p>
+              <div class="quantity-control">
+                <button onclick="decreaseQuickViewQuantity()">-</button>
+                <span id="quickViewQuantity">1</span>
+                <button onclick="increaseQuickViewQuantity()">+</button>
+              </div>
+            </div>
+            
+            <div class="quick-view-actions">
+              <button id="quickViewAddToCart" class="add-to-cart-btn">Add to Cart</button>
+              <button id="quickViewDetails" class="detail-link">View Full Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>HoodUp</h3>
+          <p>Premium quality hoodies for the modern lifestyle. Comfort meets style in every stitch.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">All Products</a></li>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Best Sellers</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Information</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HoodUp. All rights reserved.</p>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fab fa-cc-apple-pay"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Dark Mode Toggle -->
+  <div class="dark-mode-toggle" id="darkModeToggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="script.js" defer></script>
+  
+</body>
+</html>
